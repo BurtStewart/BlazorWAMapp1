@@ -1,0 +1,256 @@
+﻿@page "/HeparinRPhComponent"
+@inject HttpClient Http
+
+<h3>Heparin Protocol</h3>
+
+<p>
+    <h4>Selected Indication - @HepIndication </h4>
+    <h4>Selected Lab - @LabToMonitor </h4>
+    
+    <EditForm Model="HepIndication">
+
+        <div>
+
+            <InputRadioGroup Name="Indication" @bind-Value="HepIndication">
+
+                <InputRadio Name="Indication" Value="@("Full")">  </InputRadio> Full <br />
+
+                <InputRadio Name="Indication" Value="@("Cardiac")">  </InputRadio> Cardiac <br />
+
+                <InputRadio Name="Indication" Value="@("Stroke")">  </InputRadio> Stroke <br />
+
+                <InputRadio Name="Indication" Value="@("EKOS")">  </InputRadio> EKOS <br />
+
+            </InputRadioGroup>
+
+        </div>
+
+        <div>
+
+            <InputRadioGroup Name="Lab" @bind-Value="LabToMonitor">
+
+                <InputRadio Name="Lab" Value="@("aPTT")">  </InputRadio> aPTT <br />
+
+                <InputRadio Name="Lab" Value="@("AntiXa")">  </InputRadio> AntiXa <br />
+
+            </InputRadioGroup>
+
+        </div>
+
+    </EditForm>
+
+
+        @*<input type="radio" name="Indication" value="Full"/>
+        <input type="radio" name="Indication" value="Cardiac"/>
+        <input type="radio" name="Indication" value="Stroke" />
+        <input type="radio" name="Indication" value=" EKOS" />*@
+</p><p>
+    <input placeholder="Ht (Inches)" @bind=InputHt />
+    <input placeholder="Wt (Kg)" @bind=InputWt />
+    <input placeholder="SEX (M or F)" @bind=InputSex />
+    <input placeholder="INR" @bind=InputINR />
+    <input placeholder="AntiXa" @bind=InputAntiXa />
+    <input placeholder="Prior AntiCoag (Y/N)" @bind=InputPriorAnticoag />
+
+
+    
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Ht (Inches)</th>
+                <th>Wt (Kg)</th>
+                <th>Sex</th>
+                <th>INR</th>
+                <th>AntiXa</th>
+                <th>Prior Anticoag</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@InputHt.ToString()</td>
+                <td>@InputWt.ToString()</td>
+                <td>@InputSex</td>
+                <td>@InputINR.ToString()</td>
+                <td>@InputAntiXa.ToString()</td>
+                <td>@InputPriorAnticoag.ToString()</td>
+            </tr>
+        </tbody>
+    </table>
+        
+</p>
+<p>
+        
+    @if (@ProtocolListStrings.Count > 0)
+        @foreach (string Line in @ProtocolListStrings)
+        { <p>@Line</p>}
+
+
+
+</p>
+
+    
+<p>
+
+        <button class="btn btn-primary" @onclick="FillPtDataObj">Calculate</button>
+</p>
+
+
+
+    @code
+{
+
+        private string _HepIndiction = string.Empty ;
+        public string HepIndication
+        {
+            get { return _HepIndiction; }
+            set
+            {
+                _HepIndiction = value;
+                OnPtDataChange();
+            }
+
+        }
+
+        private string _LabToMonitor = string.Empty;
+        public string LabToMonitor
+        {
+            get { return _LabToMonitor; }
+            set
+            {
+                _LabToMonitor = value;
+                OnPtDataChange();
+            }
+        }
+
+
+
+        private string _InputHt = string.Empty;
+        public string InputHt
+        {
+            get { return _InputHt; }
+            set
+            {
+                _InputHt = value;
+                OnPtDataChange();
+            }
+        }
+
+        private string _InputWt = string.Empty;
+        public string InputWt
+        {
+            get { return _InputWt; }
+            set
+            {
+                _InputWt = value;
+                OnPtDataChange();
+            }
+        }
+
+        private string _InputSex = string.Empty;
+        public string InputSex
+        {
+            get { return _InputSex; }
+            set
+            {
+                _InputSex = value;
+                OnPtDataChange();
+            }
+        }
+
+        private string _InputINR = string.Empty;
+        public string InputINR
+        {
+            get { return _InputINR; }
+            set
+            {
+                _InputINR = value;
+                OnPtDataChange();
+            }
+        }
+
+        private string _InputAntiXa = string.Empty;
+        public string InputAntiXa
+        {
+            get { return _InputAntiXa; }
+            set
+            {
+                _InputAntiXa = value;
+                OnPtDataChange();
+            }
+        }
+
+        private string _InputPriorAnticoag = string.Empty;
+        public string InputPriorAnticoag
+        {
+            get { return _InputPriorAnticoag; }
+            set
+            {
+                _InputPriorAnticoag = value;
+                OnPtDataChange();
+            }
+        }
+
+
+
+        private void OnPtDataChange()
+        {
+            ProtocolListStrings.Clear();
+            ProtocolListStrings.Add("BETA VERSION: USE AT YOUR OWN RISK.");
+            ProtocolListStrings.Add("FYI: Use the Heparin Protocol (new),if AntiXa then add comment Lab is Unfractionated Heparin, delay Adj Doses start by 6 hr.");
+        }
+
+        public HeparinProtocol.PtSpecificData PtData = new HeparinProtocol.PtSpecificData();
+        public HeparinProtocol.RPhHeparin MyRPhHeparin;   // = new HeparinProtocol.RPhHeparin();
+
+        public List<string> ProtocolListStrings { get; set; } = new List<string>();
+
+        public void FillPtDataObj()
+        {
+
+            int.TryParse(InputHt, out PtData.iHt);
+            double.TryParse(InputWt, out PtData.dWtKg);
+            PtData.sSex = InputSex;
+            double.TryParse(InputINR, out PtData.dINR);
+            double.TryParse(InputAntiXa, out PtData.dAntiXa);
+            if (InputPriorAnticoag.ToUpper().Equals("Y"))
+                PtData.bIsPriorAnticoag = true;
+            else
+                PtData.bIsPriorAnticoag = false;
+
+            if (HepIndication.Equals("Full"))
+            {
+                if (LabToMonitor.Equals("aPTT"))
+                    MyRPhHeparin = new HeparinProtocol.RPhHeparin("Full", "aPTT", PtData);
+                else
+                    MyRPhHeparin = new HeparinProtocol.RPhHeparin("Full", "Xa", PtData);
+            }
+            else if (HepIndication.Equals("Cardiac"))
+            {
+                if (LabToMonitor.Equals("aPTT"))
+                    MyRPhHeparin = new HeparinProtocol.RPhHeparin("Cardiac", "aPTT", PtData);
+                else
+                    MyRPhHeparin = new HeparinProtocol.RPhHeparin("Cardiac", "Xa", PtData);
+            }
+            else if (HepIndication.Equals("Stroke"))
+            {
+                if (LabToMonitor.Equals("aPTT"))
+                    MyRPhHeparin = new HeparinProtocol.RPhHeparin("Stroke", "aPTT", PtData);
+                else
+                    MyRPhHeparin = new HeparinProtocol.RPhHeparin("Stroke", "Xa", PtData);
+            }
+            else if (HepIndication.Equals("EKOS"))
+            {
+                if (LabToMonitor.Equals("aPTT"))
+                    MyRPhHeparin = new HeparinProtocol.RPhHeparin("EKOS", "aPTT", PtData);
+                else
+                    MyRPhHeparin = new HeparinProtocol.RPhHeparin("EKOS", "Xa", PtData);
+            }
+
+            ProtocolListStrings = MyRPhHeparin.MyHepProtocol.DisplayProtocolTxt;
+
+        }
+
+
+    }
