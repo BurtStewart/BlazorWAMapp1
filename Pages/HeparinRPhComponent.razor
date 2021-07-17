@@ -10,7 +10,7 @@
     <EditForm Model="HepIndication">
 
         <div>
-
+            <h4>Select a Protocol</h4>
             <InputRadioGroup Name="Indication" @bind-Value="HepIndication">
 
                 <InputRadio Name="Indication" Value="@("Full")">  </InputRadio> Full <br />
@@ -26,7 +26,7 @@
         </div>
 
         <div>
-
+            <h4>Select a Lab to Monitor</h4>
             <InputRadioGroup Name="Lab" @bind-Value="LabToMonitor">
 
                 <InputRadio Name="Lab" Value="@("aPTT")">  </InputRadio> aPTT <br />
