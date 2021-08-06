@@ -350,14 +350,14 @@ namespace HeparinProtocol
 
                 this.InitalBolusUnitPerKg_Lab = 60;
                 this.InitalRateUnitPerKgPerHr_Lab = 12;
-                this.MaxInitialBolus_Lab = 4000;
+                this.MaxInitialBolus_Lab = 5000;
                 this.MaxInitialRate_Lab = 1000;
 
                 this.BolusAdjList_Lab.Add(60);
                 this.BolusAdjList_Lab.Add(30);
 
-                this.MaxAdjBolusList_Lab.Add(5000);
-                this.MaxAdjBolusList_Lab.Add(5000);
+                this.MaxAdjBolusList_Lab.Add(4000);
+                this.MaxAdjBolusList_Lab.Add(4000);
 
                 double[] UnitPerKgAdj = { 4, 2, 1, 0, 1, 2, 3, 4 };
                 this.RateAdjList_Lab.AddRange(UnitPerKgAdj);
@@ -408,7 +408,7 @@ namespace HeparinProtocol
                 resultList.Add("   Anti-Xa >= 0.3, No Bolus and must use aPTT, NOTE IF > 0.5 DO NOT START Rx, ");
             if (INR > 1.5)
                 resultList.Add("   INR > 1.5 so Start Rate is 10 units/kg/hr, ");
-            if (InitialBolus_aPTT.Equals(4000))
+            if (InitialBolus_aPTT.Equals(5000))
                 resultList.Add("   Max Bolus is 5,000 units, ");
             if (InitialRate_aPTT.Equals(1000))
                 resultList.Add("   Max Rate is 1,000 units/hr, ");
@@ -419,7 +419,7 @@ namespace HeparinProtocol
             resultList.Add("    For" + Ht.ToString() + " In " + WtKg.ToString() + " Kg  " + Sex + " : BMI = " + BMI.ToString("##.#") + "  INR = " + INR.ToString() + " Anti-Xa = " + AntiXa.ToString() + "\r\n\r\n");
             resultList.Add("    Inital Bolus = " + InitialBolus_aPTT.ToString("##,###") + " Units   Start at " + InitialRate_aPTT.ToString("#,###") + " Units/Hr.\r\n\r\n");
             if (BMI > 30)
-                resultList.Add("   BMI > 30 using AdjWt of  " + DosingWtKg.ToString() + " Kg,  Max Bolus: 4,000 units for PTT < 35 & 4,000 for PTT 35 - 48.\r\n\r\n");
+                resultList.Add("   BMI > 30 using AdjWt of  " + DosingWtKg.ToString() + " Kg,  Max Adj Bolus: 4,000 units.\r\n\r\n"); // for PTT < 35 & 4,000 for PTT 35 - 48
 
             resultList.Add("    Adjustment Bolus dosage rounded to nearest 100 Units. Adjustment rate rounded to nearest 50 Units/hr\r\n\r\n");
 
